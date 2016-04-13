@@ -1,0 +1,114 @@
+<!DOCTYPE HTML>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Background Shader with flat-surface-shader</title>
+	<link rel="stylesheet" href="assets/css/h5bp.css">
+	<link rel="stylesheet" href="assets/css/style.css">
+	<script src="assets/js/jquery-1.10.1.min.js"></script>
+	<script src="assets/js/modernizr.min.js"></script>
+	<script src="assets/js/flat-surface-shader.js"></script>
+
+	<!-- Styles for shader -->
+	<style>
+		html, body {
+			height: 100%;
+		}
+		.mainConatiner {
+			height: 100%;
+			position: relative;
+		}
+		.shaderBlk {
+			background: url('assets/img/bg_pattern.jpg') #333;
+			position: absolute;
+			left: 0;
+			top: 0;
+			width: 100%;
+			height: 100%;
+		}
+		.shaderOverlay {
+			height: 100%;
+		}
+		.shader {
+		    opacity: 0.25;
+		}
+	</style>
+
+	<!-- shader_config object to target shader at any place -->
+	<script>
+		var shader_config = {
+			page:	null,
+			destroy:	false
+		};
+	</script>
+
+</head>
+<body>
+	<div id="container" class="mainContainer">
+
+		<!-- Shader Block -->
+		<div class="shaderBlk">
+			<!-- Keep these two elements independent -->
+			<div id="fader_overlay" class="shaderOverlay">
+				<div id="shape_fader" class="shader"></div>
+			</div>
+		</div>
+
+	</div>
+</body>
+
+<script>
+$(document).ready(function() {
+
+	// Background
+	var canvas = document.createElement('canvas');
+
+	backgroundEnabled = canvas.getContext && canvas.getContext('2d');
+
+	if (backgroundEnabled) {
+		shader_config.destroy	=	false;
+		shader_config.background = {
+			enabled: true,
+			RENDER: {
+				// Takes all the information in a Scene and renders it to a context.
+				renderer: 'canvas'
+			},
+			MESH: {
+				ambient: '#555555', // Default 272b2f
+				diffuse: '#ffffff', // Default
+				width: 1.2, // Triangle Width
+				height: 1.2, // Triangle Height
+				depth: 50, // Transparency of the triangles
+				segments: (window.innerWidth < 740) ? 4 : 8, // Number of triangles to display in 1 row
+				slices: (window.innerWidth < 740) ? 7 : 8, // Number of triangles to display in 1 column
+				xRange: 0.15, // Wideness of the triangles in X Position
+				yRange: 0.1, // Wideness of the triangles in Y Position
+				zRange: 1.0, // Wideness of the triangles in Z Position
+				speed: 0.0006 // Speed of the moving traingles
+			},
+			LIGHT: {
+				autopilot: true, // Set this to true if you want the light to follow your mouse cursor
+				ambient: '#e6e6e6',
+				diffuse: '#ffffff',
+				count: 1, // Contrast
+				zOffset: 150,
+				xyScalar: 1,
+				speed: 0.001,
+				gravity: 1200,
+				dampening: 0.15,
+				minLimit: 8,
+				maxLimit: null,
+				minDistance: 20,
+				maxDistance: 400,
+				draw: false // Set to true if you want to just draw a background image (static).
+			}
+		}
+
+		// Initialize the background
+		initBackground();
+	}
+
+});
+</script>
+
+</html>
